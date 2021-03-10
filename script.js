@@ -52,7 +52,8 @@ function stopGame() {
   // end game
   // stop timer when game is over
   stopTimer();
-  // reset health
+  // reset variables for new game
+  clueHoldTime = 1000;
   health(0, true);
   gamePlaying = false;
   // swap the Start and Stop buttons
@@ -76,7 +77,6 @@ function playSingleClue(btn) {
 }
 
 function playClueSequence() {
-  startTimer();
   guessCounter = 0;
   let delay = nextClueWaitTime; //set delay to initial wait time
   for (let i = 0; i <= progress; i++) {
@@ -86,17 +86,20 @@ function playClueSequence() {
     delay += clueHoldTime;
     delay += cluePauseTime;
   }
+    startTimer();
 }
 
 // Handling win lose game event
 
 function loseGame() {
+  clueHoldTime = 1000;
   stopTimer();
   stopGame();
   alert("Game Over. You lost.");
 }
 
 function winGame() {
+  clueHoldTime = 1000;
   stopGame();
   stopTimer();
   alert("Game Over. You won.");
@@ -109,6 +112,7 @@ function timer() {
     document.getElementById("timer").innerHTML = time + " seconds remaining.";
     time -= 1;
   } else {
+    loseGame();
     document.getElementById("timer").innerHTML = "";
   }
 }
@@ -120,7 +124,7 @@ function stopTimer() {
 }
 
 function startTimer() {
-  timerVar = setInterval(timer, 1000);
+  timerVar = setInterval(timer, 1000)
 }
 
 // health
@@ -134,11 +138,11 @@ function health(num, over = false) {
     lives = 0;
     document.getElementById("health").innerHTML = "";
   }
-  
+
   if (lives == 0 && !over) {
     document.getElementById("health").innerHTML = "";
-  } else if (lives != 0 ) {
-    document.getElementById("health").innerHTML = lives + " remaining .";
+  } else if (lives != 0) {
+    document.getElementById("health").innerHTML = lives + " lives remaining .";
   }
 }
 
@@ -160,7 +164,7 @@ function guess(btn) {
       } else {
         console.log("Game is still not over!");
         stopTimer();
-        clueHoldTime -= 150;
+        clueHoldTime -= 120;
         progress += 1;
         guessCounter = 0;
         playClueSequence();
